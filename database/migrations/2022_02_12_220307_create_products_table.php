@@ -21,13 +21,15 @@ class CreateProductsTable extends Migration
             $table->integer('stock');
             $table->string('photo');
             $table->float('price');
-            $table->tinyInteger('sale');
+            $table->tinyInteger('sale')->default(0);
+            $table->integer('views')->default(0);
             $table->float('weight');
             $table->enum('condition' , ['new' , 'used']);
             $table->enum('status' , ['active' , 'inactive']);
             $table->foreignId('cat_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('subcat_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('vendor_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('sales')->default(0);
 
             $table->timestamps();
         });

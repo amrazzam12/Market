@@ -15,7 +15,8 @@ class CreateBannersTable extends Migration
             $table->text('slug');
             $table->text('desc');
             $table->text('photo');
-            $table->enum('status' , ['main' , 'active' , 'inactive']);
+            $table->enum('status' , ['primary','main' , 'active' , 'inactive']);
+           // $table->foreignId('product_id')->constrained('products')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

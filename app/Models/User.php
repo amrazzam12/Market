@@ -31,6 +31,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function reviews() {
+        return $this->hasMany(Review::class , 'user_id');
+    }
+
+
     public function getImageAttribute() {
         if ($this->photo == 'null') {
             return 'https://via.placeholder.com/200x200.png/000022?text=autem';

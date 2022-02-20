@@ -18,6 +18,10 @@ class Product extends Model
         return $this->belongsTo(User::class , 'vendor_id');
     }
 
+    public function reviews() {
+        return $this->hasMany(Review::class , 'product_id');
+    }
+
 
 
 
@@ -27,6 +31,10 @@ class Product extends Model
         } else {
             return $this->photo;
         }
+    }
+
+    public function getPriceWithDiscountAttribute() {
+        return $this->price - ($this->price * ($this->sale/100) );
     }
 
 

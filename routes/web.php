@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\websiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +25,21 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
+
+Route::get('home' , [websiteController::class , 'index'])->name('home');
+
+Route::get('shop' , [websiteController::class, 'shop'])->name('shop');
+Route::get('shop/{id}' , [websiteController::class, 'showProduct'])->name('products.show');
+Route::get('about_us' , [websiteController::class , 'aboutUs'])->name('about_us');
+Route::get('myCart' , [websiteController::class , 'cart'])->name('cartWebsite');
+Route::post('add-to-cart/{id}' , [websiteController::class , 'addToCart'])->name('addToCart');
+Route::get('checkout' , [websiteController::class , 'checkout'])->name('checkout');
+Route::post('create-order' , [websiteController::class , 'placeOrder'])->name('order.store');
+Route::get('contact' , [websiteController::class , 'contact'])->name('contact-us');
+Route::post('review' , [websiteController::class , 'makeReview'])->name('review.store');
+
+
+
+
+Route::get('cart_delete' , [websiteController::class , 'cartDelete'])->name('cart.delete');
 

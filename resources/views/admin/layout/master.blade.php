@@ -82,6 +82,15 @@
             </li>
 
 
+            <li class="nav-item">
+                <a class="nav-link " href="{{route('banners.index')}}">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Banners</span>
+                </a>
+
+            </li>
+
+
         </ul>
         <!-- End of Sidebar -->
 
