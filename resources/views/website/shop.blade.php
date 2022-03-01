@@ -18,7 +18,9 @@
 
                     <div class="banner-shop">
                         <a href="#" class="banner-link">
-                            <figure><img src="{{$shopBanner[0]->photo}}" alt=""></figure>
+                            @if(count($shopBanner) > 0)
+                                <figure><img src="{{$shopBanner[0]->photo}}" alt=""></figure>
+                            @endif
                         </a>
                     </div>
 
@@ -27,14 +29,16 @@
                     <div class="row">
 
                         <ul class="product-list grid-products equal-container">
-                            @foreach($products as $product)
-                                <x-product_card :product="$product" > </x-product_card>
-                            @endforeach
+                            @if(count($products) > 0)
+                                @foreach($products as $product)
+                                    <x-product_card :product="$product" > </x-product_card>
+                                @endforeach
+                            @endif
                         </ul>
 
                     </div>
+                        {{$products->links()}}
 
-                    {{$products->links()}}
                 </div><!--end main products area-->
 
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 sitebar">
@@ -42,22 +46,24 @@
                         <h2 class="widget-title">All Categories</h2>
                         <div class="widget-content">
                             <ul class="list-category">
-                                <li class="category-item has-child-cate">
-                                    <a href="{{url('shop' . '?category=All')}}" class="cate-link">{{$categories[0]->name}}</a>
+                                @if(count($categories) > 0)
+                                    <li class="category-item has-child-cate">
+                                        <a href="{{url('shop' . '?category=All')}}" class="cate-link">{{$categories[0]->name}}</a>
 
-                                </li>
-                                @foreach($categories as $cat)
-                                    @if($loop->iteration == 1) @continue @endif
-                                <li class="category-item has-child-cate">
-                                    <a href="{{url('shop' . '?category='.$cat->name)}}" class="cate-link">{{$cat->name}}</a>
-                                    <span class="toggle-control">+</span>
-                                    <ul class="sub-cate">
-                                        @foreach($cat->subcategories as $sub_cat)
-                                        <li class="category-item"><a href="{{url('shop' . '?category='.$sub_cat->name)}}" class="cate-link">{{$sub_cat->name}} ({{count($sub_cat->subCatProducts)}})</a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                @endforeach
+                                    </li>
+                                    @foreach($categories as $cat)
+                                        @if($loop->iteration == 1) @continue @endif
+                                    <li class="category-item has-child-cate">
+                                        <a href="{{url('shop' . '?category='.$cat->name)}}" class="cate-link">{{$cat->name}}</a>
+                                        <span class="toggle-control">+</span>
+                                        <ul class="sub-cate">
+                                            @foreach($cat->subcategories as $sub_cat)
+                                            <li class="category-item"><a href="{{url('shop' . '?category='.$sub_cat->name)}}" class="cate-link">{{$sub_cat->name}} ({{count($sub_cat->subCatProducts)}})</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                    @endforeach
+                            @endif
                             </ul>
                         </div>
                     </div><!-- Categories widget-->

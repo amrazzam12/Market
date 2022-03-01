@@ -6,10 +6,6 @@
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">All Banners</h1>
-
-        <a href="{{url('products') . ''}}">Main Products</a>
-        <a class="ml-5" href="{{url('products') . '?query=subproducts'}}">Sub Products</a>
-
         <div class="card shadow mb-4">
            <x-addButton :section="'banners'" :model="'Banner'" />
             <div class="card-body">
@@ -18,8 +14,8 @@
                         <thead>
                         <tr>
                             <th>title</th>
-                            <th width="200px">Slug</th>
-                            <th>Description</th>
+                            <th width="100px">Slug</th>
+                            <th width="200px">Description</th>
                             <th>Photo</th>
                             <th>Status</th>
                             <th>Operations</th>
@@ -35,7 +31,7 @@
                            <td>{{$banner->title}}</td>
                            <td>{{$banner->slug}}</td>
                            <td>{{$banner->desc}}</td>
-                           <td><img src="{{$banner->image}}" class="rounded ml-2" height="80px" width="80px"></td>
+                           <td><img src="{{asset($banner->image)}}" class="rounded ml-2" height="80px" width="80px"></td>
 
                            <td>{{ucwords($banner->status)}}</td>
 

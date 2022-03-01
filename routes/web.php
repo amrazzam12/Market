@@ -35,8 +35,14 @@ Route::get('myCart' , [websiteController::class , 'cart'])->name('cartWebsite');
 Route::post('add-to-cart/{id}' , [websiteController::class , 'addToCart'])->name('addToCart');
 Route::get('checkout' , [websiteController::class , 'checkout'])->name('checkout');
 Route::post('create-order' , [websiteController::class , 'placeOrder'])->name('order.store');
-Route::get('contact' , [websiteController::class , 'contact'])->name('contact-us');
 Route::post('review' , [websiteController::class , 'makeReview'])->name('review.store');
+Route::get('wishlist' , [websiteController::class , 'wishlist'])->name('wishlist');
+Route::post('wishlist/add' , [websiteController::class , 'addToWishlist'])->name('addToWishList');
+Route::get('wishlist/delete/{id}' , [websiteController::class , 'deleteFromWishlist'])->name('wishlist.delete');
+Route::get('contact' , [websiteController::class , 'contact'])->name('contact-us');
+Route::post('contact' , [websiteController::class , 'contactPost'])->name('contact-msg');
+
+
 
 
 

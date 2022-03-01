@@ -1,6 +1,6 @@
 
 <div class="row">
-    <div class="col-5"><a href="{{url($section.'/'.$model.'/edit')}}"><button class="btn btn-primary w-100 ml-2">Edit</button></a></div>
+    <div class="col-5"><a href="{{url('admin/' .$section.'/'.$model.'/edit')}}"><button class="btn btn-primary w-100 ml-2">Edit</button></a></div>
     <div class="col-6">
         <form action="{{$section.'/'.$model}}" method="POST" class="w-100">
             @method('delete')

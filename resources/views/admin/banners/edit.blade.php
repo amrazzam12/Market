@@ -3,26 +3,35 @@
 
 @section('content')
 
-    <h1 class="text-center mb-5 mt-5">Edit Product</h1>
+    <h1 class="text-center mb-5 mt-5">Edit Banner</h1>
     <div class="container">
-        <form action="{{url('/products/'. $category['id'])}}" method="POST" enctype="multipart/form-data">
+        <form action="{{url('admin/banners/'. $banner['id'])}}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row mx-5 mb-4">
                 <div class="col-2">
-                    <label for="username" class="col-form-label">Name</label>
+                    <label for="username" class="col-form-label">title</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" name="name" id="username" required="required" class="form-control" autocomplete="off" placeholder="Username" value="{{$category['name']}}">
+                    <input type="text" name="title" id="username" required="required" class="form-control" autocomplete="off" placeholder="Username" value="{{$banner['title']}}">
                 </div>
             </div>
 
             <div class="row mx-5 mb-4">
                 <div class="col-2">
-                    <label for="about" class="col-form-label">About</label>
+                    <label for="about" class="col-form-label">Slug</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" name="about" id="about" required="required" class="form-control" autocomplete="off" placeholder="Email" value="{{$category['slug']}}">
+                    <input type="text" name="slug" id="about" required="required" class="form-control" autocomplete="off" placeholder="Email" value="{{$banner['slug']}}">
+                </div>
+            </div>
+
+            <div class="row mx-5 mb-4">
+                <div class="col-2">
+                    <label for="desc" class="col-form-label">Description</label>
+                </div>
+                <div class="col-10">
+                    <input type="text" name="desc" id="about" required="required" class="form-control" autocomplete="off" placeholder="Email" value="{{$banner['slug']}}">
                 </div>
             </div>
 
@@ -37,32 +46,18 @@
 
             <div class="row mx-5 mb-4">
                 <div class="col-2">
-                    <label for="parent" class="col-form-label">Parent</label>
+                    <label for="status" class="col-form-label">Status</label>
                 </div>
                 <div class="col-10">
-                    <select id="parent" name="parent" class="form-control">
-
-                             <option hidden selected value="{{$category->parentCategory->id}}">{{$category->parentCategory->name}}</option>
-                        <optgroup label="Select Category">
-                    @foreach($products as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
-                        @endforeach
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row mx-5 mb-4">
-                <div class="col-2">
-                    <label for="role" class="col-form-label">Status</label>
-                </div>
-                <div class="col-10">
-                    Active <input type="radio" name="status" value="active" class="mr-5"  @if($category->status == 'active') checked @endif>
-                    InActive <input type="radio" name="status" value="inactive" class="mr-5"  @if($category->status == 'inactive') checked @endif>
+                    Primary <input type="radio" name="status" value="primary" class="mr-5" >
+                    Main <input type="radio" name="status" value="main" class="mr-5" >
+                    Active <input type="radio" name="status" value="active" class="mr-5" >
+                    Hot <input type="radio" name="status" value="hot" class="mr-5" >
+                    Latest <input type="radio" name="status" value="latest" class="mr-5" >
+                    InActive <input type="radio" name="status" value="inactive" class="mr-5">
 
                 </div>
             </div>
-
 
 
             <div class="row justify-content-center">

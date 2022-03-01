@@ -10,8 +10,10 @@ use App\Models\OrderProducts;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use MongoDB\Driver\Session;
 use Psy\Util\Str;
 
@@ -21,9 +23,9 @@ class websiteController extends Controller
         return view('website.index' , [
             'mainBanners' =>Banner::where('status' , 'primary')->take(3)->get(),
             'banners' => Banner::where('status' ,  'main')->take(2)->get(),
-            'hotProductsBanner' =>Banner::where(['slug' => 'hot' , 'status' => 'active'])->take(1)->get() ,
-            'latestProductsBanner' => Banner::where(['slug' => 'latest' , 'status' => 'active'])->take(1)->get() ,
-            'saleProducts' => Product::where('sale' , '>' , '50')->orderBy('sale' , 'desc')->get(),
+            'hotProductsBanner' =>Banner::where('status' , 'hot')->take(1)->get() ,
+            'latestProductsBanner' => Banner::where('status' , 'latest')->take(1)->get() ,
+            'saleProducts' => Product::where('sale' , '>' , '0')->orderBy('sale' , 'desc')->take(15)->get(),
             'latestProducts' => Product::orderBy('id' , 'desc')->take(15)->get(),
             'hotProducts' => Product::orderBy('sales' , 'desc')->take(15)->get()
         ]);
@@ -38,6 +40,14 @@ class websiteController extends Controller
                 $products = Product::orderBy('sales' , 'desc')->paginate(15);
             } elseif($filter == 'new') {
                 $products = Product::orderBy('id' , 'desc')->paginate(15);
+            }
+            elseif($filter == 'TopRated') {
+                $products = Product::join('reviews' , 'products.id' , '=' , 'reviews.product_id')
+                    ->selectRaw('products.* , ceil(AVG(reviews.rating)) AS `average` ')
+                    ->groupBy('products.id')
+                    ->orderBy('average' , 'DESC')->paginate(15);
+            } elseif($filter == 'OnSale'){
+                $products = Product::orderBy('sale' , 'DESC')->paginate(15);
             }
         };
 
@@ -63,6 +73,7 @@ class websiteController extends Controller
         $subcat = \request()->get('related');
         return view('website.detail' , [
             'product' => Product::findOrFail($id),
+            'rating' => Product::findOrFail($id)->ratingAvg,
             'popularProducts' => Product::orderBy('sales' , 'desc')->take(4)->get(),
             'relatedProducts' => Product::where('subcat_id' , $subcat)->take(5)->get()
         ]);
@@ -80,7 +91,7 @@ class websiteController extends Controller
 
     public function cart()
     {
-
+        Auth::user() ? $view = 'website.cart' : $view = 'auth.login';
         $cartProducts = \session()->get('cart');
         $totalPrice = 0;
         if ($cartProducts != null) {
@@ -88,49 +99,87 @@ class websiteController extends Controller
                 $totalPrice += $cartProducts[$key]['totalPrice'];
             }
         }
-
-
-        return view('website.cart' , [
+        return view($view , [
             'popularProducts' => Product::orderBy('sales' , 'desc')->take(10)->get(),
             'cartProducts' => $cartProducts,
             'totalPrice' => $totalPrice
 
         ]);
     }
-
     public function addToCart($id , Request $request) {
 
-        $cart = \session()->get('cart');
+        if (Auth::user()) {
+            $cart = \session()->get('cart');
 
-        if ($cart == null){         //IF The Cart Is Empty
-            $cart = [
-                $id => [
-                    'product_name' => $request['name'],
-                    'price' => $request['price'] * 1,
-                    'quantity' => $request['product-quatity'] * 1,
-                    'totalPrice' => $request['price'] * $request['product-quatity'],
-                    'image' => $request['image']
-            ]];
-            \session()->put('cart' , $cart);
+            if ($cart == null){         //IF The Cart Is Empty
+                $cart = [
+                    $id => [
+                        'product_name' => $request['name'],
+                        'price' => $request['price'] * 1,
+                        'quantity' => $request['product-quatity'] * 1,
+                        'totalPrice' => $request['price'] * $request['product-quatity'],
+                        'image' => $request['image']
+                    ]];
+                \session()->put('cart' , $cart);
 
-        } else { //IF The Cart Is Not Empty
-            if (isset($cart[$id])) {
-                $cart[$id]['quantity']  += $request['product-quatity'];
-                $cart[$id]['totalPrice'] += $request['price'] * $request['product-quatity'];
-                \session()->put('cart' , $cart);
-            } else{
-                $cart[$id] = [
-                    'product_name' => $request['name'],
-                    'price' => $request['price'] * 1,
-                    'quantity' => $request['product-quatity'] * 1,
-                    'totalPrice' => $request['price'] * $request['product-quatity'],
-                    'image' => $request['image']
-                ];
-                \session()->put('cart' , $cart);
-            }
+            } else { //IF The Cart Is Not Empty
+                if (isset($cart[$id])) {
+                    $cart[$id]['quantity']  += $request['product-quatity'];
+                    $cart[$id]['totalPrice'] += $request['price'] * $request['product-quatity'];
+                    \session()->put('cart' , $cart);
+                } else{
+                    $cart[$id] = [
+                        'product_name' => $request['name'],
+                        'price' => $request['price'] * 1,
+                        'quantity' => $request['product-quatity'] * 1,
+                        'totalPrice' => $request['price'] * $request['product-quatity'],
+                        'image' => $request['image']
+                    ];
+                    \session()->put('cart' , $cart);
+                }
+        }
+            return redirect()->back();
         }
 
+        return redirect()->route('login');
+
+    }
+
+    public function wishlist()
+    {
+
+        if (Auth::user()){
+        $view = 'website.wishlist';
+        $wishlist = Wishlist::where('user_id' , '=' , \auth()->user()->id)->get();
+
+        return view($view , [
+            'popularProducts' => Product::orderBy('sales' , 'desc')->take(10)->get(),
+            'wishlist' => $wishlist
+        ]);}
+        return redirect('login');
+    }
+
+    public function addToWishlist(Request $request) {
+        $all = Wishlist::where('user_id' , '=' , $request->user_id)->get();
+        $exists = false;
+        foreach ($all as $w) {
+            if ($w['product_id'] == $request->product_id)
+                $exists = true;
+        }
+
+        if ($exists == false){
+            $wishlist = Wishlist::create($request->except('_token'));
+        }
         return redirect()->back();
+
+
+    }
+
+    public function deleteFromWishlist($id) {
+
+        Wishlist::find($id)->delete();
+        return redirect()->back();
+
     }
 
     public function cartDelete() {
@@ -160,8 +209,19 @@ class websiteController extends Controller
     }
 
     public function placeOrder(Request $request) {
+        $latestOrder = Order::orderBy('created_at','DESC')->first();
+        $ordNum =  rand(1,111000)  . '.' . ($latestOrder->order_number);
+
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone_number' => 'required',
+            'email_address' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
        $order =  Order::create([
-           'order_number' => rand(0,100000),
+           'order_number' => $ordNum,
            'user_id' => \auth()->user()->id,
            'item_count' => 0,
            'total_price' => 0,
@@ -206,6 +266,12 @@ class websiteController extends Controller
 
     public function contact() {
         return view('website.contact-us');
+    }
+
+    public function contactPost(Request $request) {
+        DB::table('contacts')->insert([$request->except('_token' , 'ok')]);
+        return redirect()->back();
+
     }
 
 

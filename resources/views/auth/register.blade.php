@@ -9,7 +9,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
             @csrf
 
             <!-- Name -->
@@ -44,6 +44,21 @@
                                 type="password"
                                 name="password_confirmation" required />
             </div>
+
+                <div class="mt-4">
+                    <x-label for="photo" :value="'Photo'" />
+
+                    <input id="photo" name="photo" type="file" class="form-control">
+                </div>
+
+                <div class="mt-4">
+                    <x-label for="role" :value="'Role'" />
+
+                    <select name="role" id="role">
+                        <option value="customer">Customer</option>
+                        <option value="vendor">Vendor</option>
+                    </select>
+                </div>
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">

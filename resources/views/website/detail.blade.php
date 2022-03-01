@@ -29,14 +29,14 @@
                             </div>
                         </div>
                         <div class="detail-info">
-                            <div class="product-rating">
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <a href="#" class="count-review">(05 review)</a>
-                            </div>
+                            <div class="star-rating">
+                                 <span @if($rating == 1 )class="width-20-percent"
+                                     @elseif($rating == 2)class="width-40-percent"
+                                     @elseif($rating ==  3)class="width-60-percent"
+                                     @elseif($rating == 4)class="width-80-percent"
+                                     @elseif($rating == 5) class="width-100-percent"
+                                     @endif></span>
+                            </div> ({{count($product->reviews) }} Reviews)
                             <h2 class="product-name">{{$product->title}}</h2>
                             <div class="short-desc" style="margin-bottom: 2px;">
                                 <ul>
@@ -77,10 +77,20 @@
                                     </div>
                                 </div>
                                 <div class="wrap-butons">
-                                    <a href="#" class="btn add-to-cart"><input type="submit" value="Add to Cart" style="background: none;border: none"></a>
+                                     <a href="#" class="btn add-to-cart"><input type="submit" value="Add to Cart" style="background: none;border: none"></a>
+                                </div>
+                            </form>
+                                <div class="wrap-butons">
+
                                     <div class="wrap-btn">
-                                        <a href="#" class="btn btn-compare">Add Compare</a>
-                                        <a href="#" class="btn btn-wishlist">Add Wishlist</a>
+                                        <form action="{{route('addToWishList')}}" method="POST">
+                                            @csrf
+                                            @auth
+                                            <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                                            @endauth
+                                            <input type="hidden" name="product_id" value="{{$product->id}}">
+                                            <button class="btn btn-wishlist" style="background: none" type="submit">Add Wishlist</button>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -110,10 +120,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-content-item " id="review">
-
-                                    <div class="wrap-review-form">
-                                        @foreach($product->reviews as $review)
-
+                                    @forelse($product->reviews as $review)
                                         <div id="comments">
                                             <h2 class="woocommerce-Reviews-title">{{$review->user->name}}</span></h2>
                                             <ol class="commentlist">
@@ -123,10 +130,10 @@
                                                         <div class="comment-text">
                                                             <div class="star-rating">
                                                                 <span @if($review->rating == 1)class="width-20-percent"
-                                                                    @elseif($review->rating == 2) class="width-40-percent"
-                                                                    @elseif($review->rating == 3) class="width-60-percent"
-                                                                    @elseif($review->rating == 4) class="width-80-percent"
-                                                                    @elseif($review->rating == 5) class="width-100-percent"
+                                                                      @elseif($review->rating == 2) class="width-40-percent"
+                                                                      @elseif($review->rating == 3) class="width-60-percent"
+                                                                      @elseif($review->rating == 4) class="width-80-percent"
+                                                                      @elseif($review->rating == 5) class="width-100-percent"
                                                                     @endif>Rated <strong class="rating">{{$review->rating}}</strong> out of 5</span>
                                                             </div>
                                                             <p class="meta">
@@ -142,11 +149,14 @@
                                                 </li>
                                             </ol>
                                         </div><!-- #comments -->
-                                            @endforeach
+                                    @empty
+                                        No Comments
+                                    @endforelse
+                                    <div class="wrap-review-form">
                                         <div id="review_form_wrapper">
                                             <div id="review_form">
                                                 <div id="respond" class="comment-respond">
-
+                                                @auth
                                                     <form action="{{route('review.store')}}" method="post" id="commentform" class="comment-form">
                                                         @csrf
                                                         <div class="comment-form-rating">
@@ -175,7 +185,11 @@
                                                         <p class="form-submit">
                                                             <input name="submit" type="submit" id="submit" class="btn btn-primary" value="Comment">
                                                         </p>
+
                                                     </form>
+                                                   @endauth
+                                                    @guest <a href="{{route('login')}}">Login To Leave A Comment</a> @endguest
+
 
                                                 </div><!-- .comment-respond-->
                                             </div><!-- #review_form -->

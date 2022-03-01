@@ -35,9 +35,13 @@ class User extends Authenticatable
         return $this->hasMany(Review::class , 'user_id');
     }
 
+    public function wishlist() {
+        return $this->hasMany(Wishlist::class , 'user_id');
+    }
+
 
     public function getImageAttribute() {
-        if ($this->photo == 'null') {
+        if ($this->photo == 'null' || $this->photo == "") {
             return 'https://via.placeholder.com/200x200.png/000022?text=autem';
         } else {
             return $this->photo;

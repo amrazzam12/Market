@@ -7,8 +7,8 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">All Categories</h1>
 
-        <a href="{{url('categories') . ''}}">Main Categories</a>
-        <a class="ml-5" href="{{url('categories') . '?query=subcategories'}}">Sub Categories</a>
+        <a href="{{url('admin/categories') . ''}}">Main Categories</a>
+        <a class="ml-5" href="{{url('admin/categories') . '?query=subcategories'}}">Sub Categories</a>
 
         <div class="card shadow mb-4">
            <x-addButton :section="'categories'" :model="'Category'" />

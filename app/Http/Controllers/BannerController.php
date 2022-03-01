@@ -30,7 +30,7 @@ class BannerController extends Controller
         if ($request->hasFile('photo')) {
             $imgExt = $request->file('photo')->getClientOriginalExtension();
             $imgName = 'storage/banners/' . time() . '.' . $imgExt;
-            \Intervention\Image\Facades\Image::make($request->file('photo'))->resize(1170,500)->save($imgName);
+            \Intervention\Image\Facades\Image::make($request->file('photo'))->save($imgName);
             $banner->photo = $imgName;
         } else {
             $banner->photo = 'https://via.placeholder.com/1170x500.png/000022?text=autem';
@@ -42,8 +42,29 @@ class BannerController extends Controller
     }
 
 
+    public function edit($id) {
+        return view('admin.banners.edit' , [
+            'banner' => Banner::findOrFail($id)
+        ]);
+    }
 
+    public function update($id , Request $request) {
+        $banner = Banner::findOrFail($id);
+        $banner->title = $request->title;
+        $banner->slug = $request->slug;
+        $banner->desc = $request->desc;
+        $banner->status = $request->status;
+        if ($request->hasFile('photo')) {
+            $imgExt = $request->file('photo')->getClientOriginalExtension();
+            $imgName = 'storage/categories/' . time() . '.' . $imgExt;
+            \Intervention\Image\Facades\Image::make($request->file('photo'))->resize(200,200)->save($imgName);
+            $banner->photo = $imgName;
+        }
 
+        $banner->save();
+
+        return redirect()->route('banners.index');
+    }
 
     public function destroy($id)
     {

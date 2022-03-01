@@ -23,21 +23,22 @@ class UsersController extends Controller
 
     public function store(UserStoreRequest $request) {
 
-        $request->validated();
-       $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->role = $request->role;
         if ($request->hasFile('photo')) {
             $imgExt = $request->file('photo')->getClientOriginalExtension();
             $imgName = 'storage/users/' . time() . '.' . $imgExt;
             \Intervention\Image\Facades\Image::make($request->file('photo'))->resize(200,200)->save($imgName);
-            $user->photo = $imgName;
+            $photo = $imgName;
         } else {
-            $user->photo = 'https://via.placeholder.com/200x200.png/000022?text=autem';
+            $photo = 'https://via.placeholder.com/200x200.png/000022?text=autem';
         }
-            $user->save();
+        DB::table('users')->insert([
+            'name' => $request->name,
+            'password' => bcrypt( $request->password),
+            'email' => $request->email,
+            'role' => $request->role,
+            'photo' => $photo,
+        ]);
+
         return redirect()->route('users.index');
     }
 
@@ -56,7 +57,7 @@ class UsersController extends Controller
             'role' => 'required|in:admin,customer,vendor'
         ]);
 
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role = $request->role;

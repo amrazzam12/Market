@@ -7,10 +7,10 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">All Users</h1>
 
-        <a href="{{url('users')}}">All Users</a>
-        <a class="ml-5" href="{{url('users') . '?query=admins'}}">Admins</a>
-        <a class="ml-5" href="{{url('users') . '?query=vendors'}}">Vendors</a>
-        <a class="ml-5" href="{{url('users') . '?query=customers'}}">Customers</a>
+        <a href="{{url('admin/users')}}">All Users</a>
+        <a class="ml-5" href="{{url('admin/users') . '?query=admins'}}">Admins</a>
+        <a class="ml-5" href="{{url('admin/users') . '?query=vendors'}}">Vendors</a>
+        <a class="ml-5" href="{{url('admin/users') . '?query=customers'}}">Customers</a>
 
         <div class="card shadow mb-4">
            <x-addButton :section="'users'" :model="'User'" />
@@ -28,6 +28,7 @@
                         </thead>
                        <tbody>
                        @foreach($users as $user)
+                           @if($loop->iteration == 1) @continue @endif
                        <tr>
                            <td>{{$user->name}}</td>
                            <td>{{$user->email}}</td>

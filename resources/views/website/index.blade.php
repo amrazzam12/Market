@@ -26,14 +26,14 @@
 			<!--BANNER-->
 			<div class="wrap-banner style-twin-default">
                 @if(count($banners) > 0)
-                @foreach($banners as $banner)
-				<div class="banner-item">
-					<a href="{{url('shop')}}" class="link-banner banner-effect-1">
-						<figure><img src="{{$banner->photo}}" alt="" width="580" height="190"></figure>
-					</a>
-				</div>
-                @endforeach @else
-                    No Banners
+                    @foreach($banners as $banner)
+                    <div class="banner-item">
+                        <a href="{{url('shop')}}" class="link-banner banner-effect-1">
+                            <figure><img src="{{$banner->photo}}" alt="" width="580" height="190"></figure>
+                        </a>
+                    </div>
+                    @endforeach @else
+                        No Banners
                 @endif
 
 			</div>
@@ -58,7 +58,7 @@
 				<div class="wrap-top-banner">
 					<a href="#" class="link-banner banner-effect-2">
                         @if(count($latestProductsBanner) > 0)
-						<figure><img src="{{$latestProductsBanner[0]->photo}}" width="1170" height="240" alt=""></figure>
+						<figure><img src="{{$latestProductsBanner[0]->photo}}" alt=""></figure>
                         @endif
 					</a>
 				</div>
@@ -88,7 +88,7 @@
 				<div class="wrap-top-banner">
 					<a href="#" class="link-banner banner-effect-2">
                         @if(count($hotProductsBanner) > 0)
-						    <figure><img src="{{$hotProductsBanner[0]->photo}}" width="1170" height="240" alt=""></figure>
+						    <figure><img src="{{$hotProductsBanner[0]->image}}"  width="1170" height="240" alt=""></figure>
                         @endif
 					</a>
 				</div>

@@ -7,9 +7,6 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">All Products</h1>
 
-        <a href="{{url('products') . ''}}">Main Products</a>
-        <a class="ml-5" href="{{url('products') . '?query=subproducts'}}">Sub Products</a>
-
         <div class="card shadow mb-4">
            <x-addButton :section="'products'" :model="'Product'" />
             <div class="card-body">
@@ -18,10 +15,8 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th width="200px">About</th>
                             <th>Photo</th>
                             <th>Category</th>
-                            <th>Condition</th>
                             <th>Price</th>
                             <th>Stock</th>
                             <th>Sale</th>
@@ -35,12 +30,9 @@
 
                        <tr>
 
-                           <td>{{$product->title}}</td>
-                           <td>{{$product->slug}}</td>
-                           <td><img src="{{$product->image}}" class="rounded ml-2" height="80px" width="80px"></td>
+                           <td width="300px">{{$product->title}}</td>
+                           <td><img src="{{asset($product->image)}}" class="rounded ml-2" height="80px" width="80px"></td>
                            <td>{{$product->category->name}}</td>
-
-                           <td>{{ucwords($product->condition)}}</td>
                            <td>{{$product->price}}$</td>
                            <td>{{$product->stock}}</td>
                            <td>{{$product->sale}}%</td>

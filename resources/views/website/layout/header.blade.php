@@ -42,7 +42,7 @@
                             @if(\Illuminate\Support\Facades\Auth::user())
                                 <li class="menu-item"style="margin-right: 5px" >{{auth()->user()->name}}</li>
                                 @if(auth()->user()->role == 'admin')
-                                    <li class="menu-item"><a href="{{url('panel')}}">Dashboard</a></li>
+                                    <li class="menu-item"><a href="{{url('admin')}}">Dashboard</a></li>
                                 @endif
                             <li class="menu-item">
                                 <form action="{{route('logout')}}" method="POST">
@@ -73,25 +73,26 @@
                 <div class="mid-section main-info-area">
 
                     <div class="wrap-logo-top left-section">
-                        <a href="index.html" class="link-to-home"><img src="{{asset('assets/images/logo-top-1.png')}}" alt="mercado"></a>
+                        <a href="{{route('home')}}" class="link-to-home"><img src="{{asset('assets/images/logo-top-1.png')}}" alt="mercado"></a>
                     </div>
 
                     <div class="wrap-search center-section">
-                        <div class="wrap-search-form">
-                            <form action="#" id="form-search-top" name="form-search-top">
-                                <input type="text" name="search" value="" placeholder="Search here...">
-                                <button form="form-search-top" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
-
-                            </form>
-                        </div>
+                       
                     </div>
 
                     <div class="wrap-icon right-section">
                         <div class="wrap-icon-section wishlist">
-                            <a href="#" class="link-direction">
+                            <a href="{{route('wishlist')}}" class="link-direction">
                                 <i class="fa fa-heart" aria-hidden="true"></i>
                                 <div class="left-info">
-                                    <span class="index">0 item</span>
+                                    <span class="index">
+                                        @auth
+                                        {{count(\App\Models\Wishlist::where('user_id' , '=' , auth()->user()->id)->get())}} items
+                                        @endauth
+                                        @guest
+                                            0 items
+                                        @endguest
+                                    </span>
                                     <span class="title">Wishlist</span>
                                 </div>
                             </a>
@@ -126,11 +127,10 @@
                 <div class="header-nav-section">
                     <div class="container">
                         <ul class="nav menu-nav clone-main-menu" id="mercado_haead_menu" data-menuname="Sale Info" >
-                            <li class="menu-item"><a href="#" class="link-term">Weekly Featured</a><span class="nav-label hot-label">hot</span></li>
-                            <li class="menu-item"><a href="{{url('shop' . '?filter=hot')}}" class="link-term">Hot Sale items</a><span class="nav-label hot-label">hot</span></li>
-                            <li class="menu-item"><a href="{{url('shop' . '?filter=new')}}" class="link-term">Top new items</a><span class="nav-label hot-label">hot</span></li>
-                            <li class="menu-item"><a href="#" class="link-term">Top Selling</a><span class="nav-label hot-label">hot</span></li>
-                            <li class="menu-item"><a href="#" class="link-term">Top rated items</a><span class="nav-label hot-label">hot</span></li>
+                            <li class="menu-item"><a href="{{url('shop' . '?filter=hot')}}" class="link-term">Hot Sale</a><span class="nav-label hot-label">hot</span></li>
+                            <li class="menu-item"><a href="{{url('shop' . '?filter=new')}}" class="link-term">Top new items</a><span class="nav-label new-label">New</span></li>
+                            <li class="menu-item"><a href="{{url('shop' . '?filter=TopRated')}}" class="link-term">Top rated items</a><span class="nav-label hot-label">Top Rated</span></li>
+                            <li class="menu-item"><a href="{{url('shop' . '?filter=OnSale')}}" class="link-term">On Sale Items</a><span class="nav-label sale-label">Sale</span></li>
                         </ul>
                     </div>
                 </div>

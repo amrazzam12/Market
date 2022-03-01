@@ -13,7 +13,7 @@
             </div>
             <form action="{{route('order.store')}}" method="post" name="frm-billing">
                 @csrf
-            <div class=" main-content-area">
+            <p class=" main-content-area">
                 <div class="wrap-address-billing">
                     <h3 class="box-title">Billing Address</h3>
 
@@ -43,6 +43,12 @@
                         </p>
 
                 </div>
+
+                @forelse($errors->all() as $error)
+                    <p class="alert alert-danger">{{$error}}</p>
+                @empty
+                @endforelse
+
                 <div class="summary summary-checkout">
                     <div class="summary-item payment-method">
                         <h4 class="title-box">Payment Method</h4>

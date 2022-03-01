@@ -5,7 +5,7 @@
 
     <h1 class="text-center mb-5 mt-5">Add Category</h1>
     <div class="container">
-        <form action="{{url('/categories')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{url('admin/categories')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row mx-5 mb-4">
                 <div class="col-2">

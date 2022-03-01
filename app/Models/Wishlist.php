@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Wishlist extends Model
 {
+
     use HasFactory;
-    protected $table = 'orders';
-    protected $guarded = [];
 
+    protected $table = 'wishlist';
+    protected $fillable = ['user_id' , 'product_id'];
 
+    public function item() {
+        return $this->belongsTo(Product::class , 'product_id');
+    }
     public function user() {
         return $this->belongsTo(User::class , 'user_id');
-    }
-
-    public function items() {
-        return $this->hasMany(OrderProducts::class , 'order_id');
     }
 }

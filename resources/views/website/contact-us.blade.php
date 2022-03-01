@@ -7,7 +7,7 @@
 
             <div class="wrap-breadcrumb">
                 <ul>
-                    <li class="item-link"><a href="#" class="link">home</a></li>
+                    <li class="item-link"><a href="{{route('home')}}" class="link">home</a></li>
                     <li class="item-link"><span>Contact us</span></li>
                 </ul>
             </div>
@@ -17,8 +17,8 @@
                         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                             <div class="contact-box contact-form">
                                 <h2 class="box-title">Leave a Message</h2>
-                                <form action="#" method="get" name="frm-contact">
-
+                                <form action="{{route('contact-msg')}}" method="Post" name="frm-contact">
+                                @csrf
                                     <label for="name">Name<span>*</span></label>
                                     <input type="text" value="" id="name" name="name" >
 
@@ -65,7 +65,7 @@
                                         <i class="fa fa-envelope" aria-hidden="true"></i>
                                         <div class="right-info">
                                             <b>Email</b>
-                                            <p>Support1@Mercado.com</p>
+                                            <p>email@email.com</p>
                                         </div>
                                     </div>
 
