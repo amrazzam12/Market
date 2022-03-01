@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="wrap-search center-section">
-                       
+
                     </div>
 
                     <div class="wrap-icon right-section">
