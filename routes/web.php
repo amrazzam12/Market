@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('website.index');
-});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,7 +24,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-Route::get('home' , [websiteController::class , 'index'])->name('home');
+Route::get('/' , [websiteController::class , 'index'])->name('home');
 
 Route::get('shop' , [websiteController::class, 'shop'])->name('shop');
 Route::get('shop/{id}' , [websiteController::class, 'showProduct'])->name('products.show');
