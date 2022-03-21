@@ -1,7 +1,6 @@
 
+Demo: http://electromarket.freecluster.eu/public/home
 
-
-
-Admin Account :
-        admin@admin.com 
+User Account :
+        user@user.com 
         123123123
